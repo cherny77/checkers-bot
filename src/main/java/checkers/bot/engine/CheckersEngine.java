@@ -1,6 +1,7 @@
 package checkers.bot.engine;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class CheckersEngine {
 
@@ -70,13 +71,14 @@ public class CheckersEngine {
     }
 
     private boolean isFreePosition(int[][] board, int x, int y) {
-        return board[x][y] == FREE_CELL;
+        return board[y][x] == FREE_CELL;
     }
 
     private int[][] doStepForward(int[][] board, int figureKey, int posX, int posY, int x, int y) {
-        board[posX][posY] = FREE_CELL;
-        board[x][y] = figureKey;
-        return board;
+        int[][] tempBoard = Arrays.stream(board).map(int[]::clone).toArray(int[][]::new);
+        tempBoard[posY][posX] = FREE_CELL;
+        tempBoard[y][x] = figureKey;
+        return tempBoard;
     }
 
     private boolean isPositiveNum(int num) {
@@ -94,15 +96,16 @@ public class CheckersEngine {
     }
 
     private int[][] transformToQueen(int[][] board, int figureKey, int posX, int posY, int x, int y) {
-        board[posX][posY] = FREE_CELL;
-        board[x][y] = figureKey * 10;
-        return board;
+        int[][] tempBoard = Arrays.stream(board).map(int[]::clone).toArray(int[][]::new);
+        tempBoard[posY][posX] = FREE_CELL;
+        tempBoard[y][x] = figureKey * 10;
+        return tempBoard;
     }
 
 
     private boolean isEnemyForward(int[][] board, int posX, int posY, int x, int y) {
-        if (isPositiveNum(board[posX][posY]) && isNegativeNumber(board[x][y])) return true;
-        else if (isNegativeNumber(board[posX][posY]) && isPositiveNum(board[x][y])) return true;
+        if (isPositiveNum(board[posX][posY]) && isNegativeNumber(board[y][x])) return true;
+        else if (isNegativeNumber(board[posX][posY]) && isPositiveNum(board[y][x])) return true;
         else return false;
     }
 
@@ -147,15 +150,15 @@ public class CheckersEngine {
     }
 
     private int[][] killEnemy(int[][] board, int figureKey, int posX, int posY, int oldX, int oldY, int x, int y) {
-        board[posX][posY] = FREE_CELL;
-        board[x][y] = FREE_CELL;
-        board[oldX][oldY] = FREE_CELL; // todo may change to killed enemy number - 6 for example ?
-        board[x][y] = figureKey;
-        return board;
+        int[][] tempBoard = Arrays.stream(board).map(int[]::clone).toArray(int[][]::new);
+        tempBoard[posY][posX] = FREE_CELL;
+        tempBoard[oldY][oldX] = FREE_CELL; // todo may change to killed enemy number - 6 for example ?
+        tempBoard[y][x] = figureKey;
+        return tempBoard;
     }
 
     private int[][] continueKillEnemy(int[][] board, int[][] steps, int figureKey, int posX, int posY) {
-        int[][] newBoard = board.clone();
+        int[][] newBoard = Arrays.stream(board).map(int[]::clone).toArray(int[][]::new);
         for (int i = 0; i < steps.length; i++) {
             int x = steps[i][0];
             int y = steps[i][1];
@@ -195,7 +198,7 @@ public class CheckersEngine {
     //
     private ArrayList<int[][]> doStep(int[][] board, int[][] steps, int figureKey, int posX, int posY) {
 
-        ArrayList<int[][]> boards = new ArrayList<>();
+        ArrayList<int[][]> allPossibleBoards = new ArrayList<>();
 
         for (int i = 0; i < steps.length; i++) {
             int x = steps[i][0];
@@ -219,7 +222,7 @@ public class CheckersEngine {
                     else {
                         newBoard = doStepForward(board, figureKey, posX, posY, x, y);
                     }
-                    boards.add(newBoard);
+                    allPossibleBoards.add(newBoard);
                 }
                 // if position isn`t free and there stay enemy
                 else if (isEnemyForward(board, posX, posY, x, y)) {
@@ -250,35 +253,35 @@ public class CheckersEngine {
                             steps = getPossibleSteps(getNumOfPossibleSteps(figureKey), posX, posY);
                             newBoard = continueKillEnemy(newBoard, steps, figureKey, posX, posY);
                         }
-                        boards.add(newBoard);
+                        allPossibleBoards.add(newBoard);
                     }
                 }
             }
         }
-        return boards;
+        return allPossibleBoards;
     }
 
 
-    private ArrayList<int[][]> createBoardWithStep(int[][] board, int figureKey, int posX, int posY) {
+    private ArrayList<int[][]> createBoardWithStep(int figureKey, int posX, int posY) {
 
         int checkerSteps = getNumOfPossibleSteps(figureKey);
         int[][] steps = getPossibleSteps(checkerSteps, posX, posY);
-        int[][] newBoard = board.clone();
+        int[][] newBoard = Arrays.stream(this.board).map(int[]::clone).toArray(int[][]::new);
         ArrayList<int[][]> boards = doStep(newBoard, steps, figureKey, posX, posY);
 
         return boards;
     }
 
-    public ArrayList<ArrayList<int[][]>> getAllPossibleBoards(int[][] board, int figureKey) {
-        ArrayList<ArrayList<int[][]>> boards = new ArrayList<>();
-        for (int x = 0; x < board.length; x++) {
-            for (int y = 0; y < board[x].length; y++) {
-                if (board[x][y] == figureKey){
-                    boards.add(createBoardWithStep(board, figureKey,x,y));
+    public ArrayList<ArrayList<int[][]>> getAllPossibleBoards( int figureKey) {
+        ArrayList<ArrayList<int[][]>> allPossibleBoards = new ArrayList<>();
+        for (int x = 0; x < this.board.length; x++) {
+            for (int y = 0; y < this.board[x].length; y++) {
+                if (this.board[y][x] == figureKey){
+                    allPossibleBoards.add(createBoardWithStep(figureKey,x,y));
                 }
             }
         }
-        return boards;
+        return allPossibleBoards;
     }
 }
 
