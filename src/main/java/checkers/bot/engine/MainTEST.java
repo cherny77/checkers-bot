@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class MainTEST {
     public static void main(String[] args) throws IOException {
         data_boards data = new data_boards();
-        int[][] testingBoard = data.getBoard(7);
+        int[][] testingBoard = data.getBoard(4);
 
         CheckersEngine engine = new CheckersEngine(testingBoard, -1);
         ArrayList<ArrayList<int[][]>> newBoards = engine.getAllPossibleBoards(1);

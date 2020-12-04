@@ -239,7 +239,7 @@ public class CheckersEngine {
 //        System.out.println("~~~~~~~~~~~~~~~~~~~~");
 //        System.out.println(boardToString(newBoard));
 //        System.out.println("|||||||||||||||||||");
-        if (isUniqueBoards(bList.get(bList.size() - 1), newBoard)) {
+        if (bList.size() > 0&&isUniqueBoards(bList.get(bList.size() - 1), newBoard)) {
             bList.add(newBoard);
         }
     }
