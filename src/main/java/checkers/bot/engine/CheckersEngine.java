@@ -2,6 +2,7 @@ package checkers.bot.engine;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Stack;
 
 public class CheckersEngine {
 
@@ -103,14 +104,13 @@ public class CheckersEngine {
         return tempBoard;
     }
 
-    private int[][] transformToQueen(int[][] board, int figureKey, int posX, int posY, int enemyX, int enemyY,int x, int y) {
+    private int[][] transformToQueen(int[][] board, int figureKey, int posX, int posY, int enemyX, int enemyY, int x, int y) {
         int[][] tempBoard = Arrays.stream(board).map(int[]::clone).toArray(int[][]::new);
         tempBoard[posY][posX] = FREE_CELL;
         tempBoard[enemyX][enemyY] = FREE_CELL;
         tempBoard[y][x] = figureKey * 10;
         return tempBoard;
     }
-
 
     private boolean isEnemyForward(int[][] board, int posX, int posY, int x, int y) {
         if (isPositiveNum(board[posY][posX]) && isNegativeNumber(board[y][x])) return true;
@@ -222,10 +222,10 @@ public class CheckersEngine {
             }
             b += "\n";
         }
-        b += "\n";
         return b;
     }
 
+    // todo problems with newBoard -> after step it rewrite
     private void continueKillEnemy(ArrayList<int[][]> bList, int[][] board, int[][] steps, int figureKey, int posX, int posY) {
         int[][] newBoard = Arrays.stream(board).map(int[]::clone).toArray(int[][]::new);
 
@@ -247,17 +247,19 @@ public class CheckersEngine {
                         // when we are queen and we can`t transform to queen
                         else {
                             newBoard = killEnemy(board, figureKey, posX, posY, oldX, oldY, x, y);
-                            posX = x;
-                            posY = y;
-                            steps = getPossibleSteps(getNumOfPossibleSteps(figureKey), posX, posY);
-                            continueKillEnemy(bList, newBoard, steps, figureKey, posX, posY);
+                            int[][] newBoard2 = Arrays.stream(newBoard).map(int[]::clone).toArray(int[][]::new);
+                            int[][] newSteps = getPossibleSteps(getNumOfPossibleSteps(figureKey), x, y);
+
+                            continueKillEnemy(bList, newBoard2, newSteps, figureKey, x, y);
                         }
                     } else {
                         newBoard = killEnemy(board, figureKey, posX, posY, oldX, oldY, x, y);
-                        posX = x;
-                        posY = y;
-                        steps = getPossibleSteps(getNumOfPossibleSteps(figureKey), posX, posY);
-                        continueKillEnemy(bList, newBoard, steps, figureKey, posX, posY);
+
+                        int[][] newBoard2 = Arrays.stream(newBoard).map(int[]::clone).toArray(int[][]::new);
+                        int[][] newSteps = getPossibleSteps(getNumOfPossibleSteps(figureKey), x, y);
+
+                        continueKillEnemy(bList, newBoard2, newSteps, figureKey, x, y);
+
                     }
                 }
             }
@@ -297,9 +299,9 @@ public class CheckersEngine {
                     else {
                         newBoard = doStepForward(board, figureKey, posX, posY, x, y);
                     }
-                    System.out.println("----------------------------");
-                    System.out.println(boardToString(newBoard));
-                    System.out.println("++++++++++++++++++++++++++++");
+//                    System.out.println("++++++++++++++++++++++++++++");
+//                    System.out.println(boardToString(newBoard));
+//                    System.out.println("++++++++++++++++++++++++++++");
                     allPossibleBoards.add(newBoard);
                 }
                 // if position isn`t free and there stay enemy
@@ -314,29 +316,27 @@ public class CheckersEngine {
                         if (isEnemyQueenPosition(figureKey, y)) {
                             // when we are simple player and we can transform to queen
                             if (steps.length == 2) {
-                                newBoard = transformToQueen(board, figureKey, posX, posY, oldX, oldY,x, y);
+                                newBoard = transformToQueen(board, figureKey, posX, posY, oldX, oldY, x, y);
+                                allPossibleBoards.add(newBoard);
                             }
                             // when we are queen and we can`t transform to queen
                             else {
                                 newBoard = killEnemy(board, figureKey, posX, posY, oldX, oldY, x, y);
-                                int newPosX = x;
-                                int newPosY = y;
-                                int[][] newSteps = getPossibleSteps(getNumOfPossibleSteps(figureKey), newPosX, newPosY);
-                                continueKillEnemy(bList, newBoard, newSteps, figureKey, newPosX, newPosY);
+                                int[][] newSteps = getPossibleSteps(getNumOfPossibleSteps(figureKey), x, y);
+
+                                continueKillEnemy(bList, newBoard, newSteps, figureKey, x, y);
 
                             }
                         } else {
                             newBoard = killEnemy(board, figureKey, posX, posY, oldX, oldY, x, y);
-                            int newPosX = x;
-                            int newPosY = y;
-                            int[][] newSteps = getPossibleSteps(getNumOfPossibleSteps(figureKey), newPosX, newPosY);
-                            continueKillEnemy(bList, newBoard, newSteps, figureKey, newPosX, newPosY);
+                            int[][] newSteps = getPossibleSteps(getNumOfPossibleSteps(figureKey), x, y);
+                            continueKillEnemy(bList, newBoard, newSteps, figureKey, x, y);
 
                         }
                         System.out.println("----------------------------");
                         System.out.println(boardToString(newBoard));
-                        System.out.println("++++++++++++++++++++++++++++");
-                        allPossibleBoards.add(newBoard);
+                        System.out.println("----------------------------");
+//                        allPossibleBoards.add(newBoard);
                     }
                 }
             }

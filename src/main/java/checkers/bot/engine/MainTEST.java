@@ -2,11 +2,9 @@ package checkers.bot.engine;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MainTEST {
     public static void main(String[] args) throws IOException {
-
         data_boards data = new data_boards();
         int[][] testingBoard = data.getBoard(7);
 
