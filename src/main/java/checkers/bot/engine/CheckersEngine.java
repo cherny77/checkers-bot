@@ -107,7 +107,7 @@ public class CheckersEngine {
     private int[][] transformToQueen(int[][] board, int figureKey, int posX, int posY, int enemyX, int enemyY, int x, int y) {
         int[][] tempBoard = Arrays.stream(board).map(int[]::clone).toArray(int[][]::new);
         tempBoard[posY][posX] = FREE_CELL;
-        tempBoard[enemyX][enemyY] = FREE_CELL;
+        tempBoard[enemyY][enemyX] = FREE_CELL;
         tempBoard[y][x] = figureKey * 10;
         return tempBoard;
     }
@@ -166,48 +166,6 @@ public class CheckersEngine {
         return tempBoard;
     }
 
-    // old version continueKillEnemy
-    {
-//        private int[][] continueKillEnemy ( int[][] board, int[][] steps, int figureKey, int posX, int posY){
-//        int[][] newBoard = Arrays.stream(board).map(int[]::clone).toArray(int[][]::new);
-//
-//        for (int i = 0; i < steps.length; i++) {
-//            int x = steps[i][0];
-//            int y = steps[i][1];
-//            if (isPossibleX(x) && isPossibleY(y) && isEnemyForward(board, posX, posY, x, y)) {
-//                int oldX = x;
-//                int oldY = y;
-//                int[] pos = getPositionAfterFight(board, posX, posY, x, y);
-//                x = pos[0];
-//                y = pos[1];
-//                if (isCanKillEnemy(board, x, y)) {
-//                    if (isEnemyQueenPosition(figureKey, y)) {
-//                        // when we are simple player and we can transform to queen
-//                        if (steps.length == 2) {
-//                            newBoard = transformToQueen(board, figureKey, posX, posY, x, y);
-//                        }
-//                        // when we are queen and we can`t transform to queen
-//                        else {
-//                            newBoard = killEnemy(board, figureKey, posX, posY, oldX, oldY, x, y);
-//                            posX = x;
-//                            posY = y;
-//                            steps = getPossibleSteps(getNumOfPossibleSteps(figureKey), posX, posY);
-//                            newBoard = continueKillEnemy(newBoard, steps, figureKey, posX, posY);
-//                        }
-//                    } else {
-//                        newBoard = killEnemy(board, figureKey, posX, posY, oldX, oldY, x, y);
-//                        posX = x;
-//                        posY = y;
-//                        steps = getPossibleSteps(getNumOfPossibleSteps(figureKey), posX, posY);
-//                        newBoard = continueKillEnemy(newBoard, steps, figureKey, posX, posY);
-//                    }
-//                }
-//            }
-//        }
-//        return newBoard;
-//    }
-    }
-
     private String boardToString(int[][] board) {
         String b = "";
         for (int y = 0; y < board.length; y++) {
@@ -223,6 +181,16 @@ public class CheckersEngine {
             b += "\n";
         }
         return b;
+    }
+
+    private boolean isUniqueBoards(int[][] a1, int[][] a2) {
+        for (int y = 0; y < a1.length; y++) {
+            for (int x = 0; x < a1.length; x++) {
+                if (a1[y][x] != a2[y][x])
+                    return true;
+            }
+        }
+        return false;
     }
 
     // todo problems with newBoard -> after step it rewrite
@@ -242,7 +210,9 @@ public class CheckersEngine {
                     if (isEnemyQueenPosition(figureKey, y)) {
                         // when we are simple player and we can transform to queen
                         if (steps.length == 2) {
+
                             newBoard = transformToQueen(board, figureKey, posX, posY, oldX, oldY, x, y);
+                            bList.add(newBoard);
                         }
                         // when we are queen and we can`t transform to queen
                         else {
@@ -264,10 +234,12 @@ public class CheckersEngine {
                 }
             }
         }
-        System.out.println("~~~~~~~~~~~~~~~~~~~~");
-        System.out.println(boardToString(newBoard));
-        System.out.println("|||||||||||||||||||");
-        bList.add(newBoard);
+//        System.out.println("~~~~~~~~~~~~~~~~~~~~");
+//        System.out.println(boardToString(newBoard));
+//        System.out.println("|||||||||||||||||||");
+        if (isUniqueBoards(bList.get(bList.size() - 1), newBoard)) {
+            bList.add(newBoard);
+        }
     }
 
     private ArrayList<int[][]> doStep(int[][] board, int[][] steps, int figureKey, int posX, int posY) {
@@ -299,9 +271,6 @@ public class CheckersEngine {
                     else {
                         newBoard = doStepForward(board, figureKey, posX, posY, x, y);
                     }
-//                    System.out.println("++++++++++++++++++++++++++++");
-//                    System.out.println(boardToString(newBoard));
-//                    System.out.println("++++++++++++++++++++++++++++");
                     allPossibleBoards.add(newBoard);
                 }
                 // if position isn`t free and there stay enemy
@@ -325,7 +294,6 @@ public class CheckersEngine {
                                 int[][] newSteps = getPossibleSteps(getNumOfPossibleSteps(figureKey), x, y);
 
                                 continueKillEnemy(bList, newBoard, newSteps, figureKey, x, y);
-
                             }
                         } else {
                             newBoard = killEnemy(board, figureKey, posX, posY, oldX, oldY, x, y);
@@ -333,10 +301,9 @@ public class CheckersEngine {
                             continueKillEnemy(bList, newBoard, newSteps, figureKey, x, y);
 
                         }
-                        System.out.println("----------------------------");
-                        System.out.println(boardToString(newBoard));
-                        System.out.println("----------------------------");
-//                        allPossibleBoards.add(newBoard);
+//                        System.out.println("----------------------------");
+//                        System.out.println(boardToString(newBoard));
+//                        System.out.println("----------------------------");
                     }
                 }
             }
