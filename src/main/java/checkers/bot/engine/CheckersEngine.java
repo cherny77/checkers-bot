@@ -259,26 +259,18 @@ public class CheckersEngine {
     }
 
 
-    private int[][] createBoardWithStep(int[][] board, int figureKey, int posX, int posY) {
-//        int checkerSteps = getNumOfPossibleSteps(figureKey);
-//        int stepsCoor = createCoordinationForFutureSpteps()
-//        int[][] newBoard = board.clone();
-//        for (int i = 0; i < posMoving; i++) {
-//
-//        }
-        return new int[][]{};
+    private ArrayList<int[][]> createBoardWithStep(int[][] board, int figureKey, int posX, int posY) {
+        int checkerSteps = getNumOfPossibleSteps(figureKey);
+        int[][] steps = getPossibleSteps(checkerSteps, posX, posY);
+        int[][] newBoard = board.clone();
+        ArrayList<int[][]> boards = doStep(newBoard, steps, figureKey, posX, posY);
+
+        return boards;
     }
 
-    public Object[] sendVariableMap(int figureKey) {
-        for (int x = 0; x < COL; x++) {
-            for (int y = 0; y < ROW; y++) {
-                if (board[x][y] == figureKey) {
-                    futureBoards.add(createBoardWithStep(board, figureKey, x, y));
-                }
-            }
-        }
-        return null;
-    }
 
+    public static void main(String[] args){
+
+    }
 
 }

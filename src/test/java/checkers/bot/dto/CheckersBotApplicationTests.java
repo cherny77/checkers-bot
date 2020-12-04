@@ -10,4 +10,7 @@ class CheckersBotApplicationTests {
 	void contextLoads() {
 	}
 
+
+
+
 }
