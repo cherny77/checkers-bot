@@ -104,8 +104,8 @@ public class CheckersEngine {
 
 
     private boolean isEnemyForward(int[][] board, int posX, int posY, int x, int y) {
-        if (isPositiveNum(board[posX][posY]) && isNegativeNumber(board[y][x])) return true;
-        else if (isNegativeNumber(board[posX][posY]) && isPositiveNum(board[y][x])) return true;
+        if (isPositiveNum(board[posY][posX]) && isNegativeNumber(board[y][x])) return true;
+        else if (isNegativeNumber(board[posY][posX]) && isPositiveNum(board[y][x])) return true;
         else return false;
     }
 
