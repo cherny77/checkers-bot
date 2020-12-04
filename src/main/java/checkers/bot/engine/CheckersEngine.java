@@ -260,6 +260,7 @@ public class CheckersEngine {
 
 
     private ArrayList<int[][]> createBoardWithStep(int[][] board, int figureKey, int posX, int posY) {
+
         int checkerSteps = getNumOfPossibleSteps(figureKey);
         int[][] steps = getPossibleSteps(checkerSteps, posX, posY);
         int[][] newBoard = board.clone();
@@ -268,9 +269,16 @@ public class CheckersEngine {
         return boards;
     }
 
-
-    public static void main(String[] args){
-
+    public ArrayList<ArrayList<int[][]>> getAllPossibleBoards(int[][] board, int figureKey) {
+        ArrayList<ArrayList<int[][]>> boards = new ArrayList<>();
+        for (int x = 0; x < board.length; x++) {
+            for (int y = 0; y < board[x].length; y++) {
+                if (board[x][y] == figureKey){
+                    boards.add(createBoardWithStep(board, figureKey,x,y));
+                }
+            }
+        }
+        return boards;
     }
-
 }
+
