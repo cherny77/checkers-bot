@@ -241,17 +241,17 @@ public class CheckersEngine {
                             // when we are queen and we can`t transform to queen
                             else {
                                 newBoard = killEnemy(board, figureKey, posX, posY, oldX, oldY, x, y);
-                                posX = x;
-                                posY = y;
-                                steps = getPossibleSteps(getNumOfPossibleSteps(figureKey), posX, posY);
-                                newBoard = continueKillEnemy(newBoard, steps, figureKey, posX, posY);
+                                int newPosX = x;
+                                int newPosY = y;
+                                int[][] newSteps = getPossibleSteps(getNumOfPossibleSteps(figureKey), newPosX, newPosY);
+                                newBoard = continueKillEnemy(newBoard, newSteps, figureKey, newPosX, newPosY);
                             }
                         } else {
                             newBoard = killEnemy(board, figureKey, posX, posY, oldX, oldY, x, y);
-                            posX = x;
-                            posY = y;
-                            steps = getPossibleSteps(getNumOfPossibleSteps(figureKey), posX, posY);
-                            newBoard = continueKillEnemy(newBoard, steps, figureKey, posX, posY);
+                            int newPosX = x;
+                            int newPosY = y;
+                            int[][] newSteps = getPossibleSteps(getNumOfPossibleSteps(figureKey), newPosX, newPosY);
+                            newBoard = continueKillEnemy(newBoard, newSteps, figureKey, newPosX, newPosY);
                         }
                         allPossibleBoards.add(newBoard);
                     }
@@ -274,8 +274,8 @@ public class CheckersEngine {
 
     public ArrayList<ArrayList<int[][]>> getAllPossibleBoards( int figureKey) {
         ArrayList<ArrayList<int[][]>> allPossibleBoards = new ArrayList<>();
-        for (int x = 0; x < this.board.length; x++) {
-            for (int y = 0; y < this.board[x].length; y++) {
+        for (int y = 0; y < this.board.length; y++) {
+            for (int x = 0; x < this.board[y].length; x++) {
                 if (this.board[y][x] == figureKey){
                     allPossibleBoards.add(createBoardWithStep(figureKey,x,y));
                 }
