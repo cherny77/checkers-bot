@@ -102,7 +102,7 @@ public class CheckersEngine {
     private int[][] transformToQueen(int[][] board, int figureKey, int posX, int posY, int x, int y) {
         int[][] tempBoard = Arrays.stream(board).map(int[]::clone).toArray(int[][]::new);
         tempBoard[posY][posX] = FREE_CELL;
-        tempBoard[y][x] = figureKey * 10+ figureKey;
+        tempBoard[y][x] = figureKey * 10 + figureKey;
         return tempBoard;
     }
 
@@ -239,7 +239,9 @@ public class CheckersEngine {
 //        System.out.println("~~~~~~~~~~~~~~~~~~~~");
 //        System.out.println(boardToString(newBoard));
 //        System.out.println("|||||||||||||||||||");
-        if (bList.size() > 0&&isUniqueBoards(bList.get(bList.size() - 1), newBoard)) {
+        if (bList.size() > 0 && isUniqueBoards(bList.get(bList.size() - 1), newBoard)) {
+            bList.add(newBoard);
+        } else if (bList.size() == 0) {
             bList.add(newBoard);
         }
     }
