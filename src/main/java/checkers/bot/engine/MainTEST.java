@@ -35,7 +35,7 @@ public class MainTEST {
         String b = "";
         for (int y = 0; y < board.length; y++) {
             for (int x = 0; x < board[y].length; x++) {
-                if (board[y][x] == 1 || board[y][x] == 6) {
+                if (board[y][x] == 1 || board[y][x] == 2) {
                     b += " " + board[y][x] + ",";
                 } else if (board[y][x] == 0) {
                     b += " *,";

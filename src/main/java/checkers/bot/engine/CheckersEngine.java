@@ -2,10 +2,8 @@ package checkers.bot.engine;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Stack;
 
 public class CheckersEngine {
-
 
     /**
      * 1 - ми
@@ -27,9 +25,9 @@ public class CheckersEngine {
     private static final int CHECKER_STEPS_SIMPLE = 2;
     private static final int CHECKER_STEPS_QUEEN = 4;
     private static final int GOOD_PLAYER = 1;
-    private static final int GOOD_QUEEN = 10;
-    private static final int ENEMY_PLAYER = -1;
-    private static final int ENEMY_QUEEN = -10;
+    private static final int GOOD_QUEEN = 11;
+    private static final int ENEMY_PLAYER = 2;
+    private static final int ENEMY_QUEEN = 22;
 
     private ArrayList<int[][]> futureBoards;
     private int[][] board;
@@ -71,6 +69,10 @@ public class CheckersEngine {
         return y >= 0 && y < ROW;
     }
 
+    private boolean isEven(int x) {
+        return x % 2 == 0 && x > 0;
+    }
+
     private boolean isFreePosition(int[][] board, int x, int y) {
         return board[y][x] == FREE_CELL;
     }
@@ -100,7 +102,7 @@ public class CheckersEngine {
     private int[][] transformToQueen(int[][] board, int figureKey, int posX, int posY, int x, int y) {
         int[][] tempBoard = Arrays.stream(board).map(int[]::clone).toArray(int[][]::new);
         tempBoard[posY][posX] = FREE_CELL;
-        tempBoard[y][x] = figureKey * 10;
+        tempBoard[y][x] = figureKey * 10+ figureKey;
         return tempBoard;
     }
 
@@ -108,13 +110,13 @@ public class CheckersEngine {
         int[][] tempBoard = Arrays.stream(board).map(int[]::clone).toArray(int[][]::new);
         tempBoard[posY][posX] = FREE_CELL;
         tempBoard[enemyY][enemyX] = FREE_CELL;
-        tempBoard[y][x] = figureKey * 10;
+        tempBoard[y][x] = figureKey * 10 + figureKey;
         return tempBoard;
     }
 
     private boolean isEnemyForward(int[][] board, int posX, int posY, int x, int y) {
-        if (isPositiveNum(board[posY][posX]) && isNegativeNumber(board[y][x])) return true;
-        else if (isNegativeNumber(board[posY][posX]) && isPositiveNum(board[y][x])) return true;
+        if (!isEven(board[posY][posX]) && isEven(board[y][x])) return true;
+        else if (isEven(board[posY][posX]) && !isEven(board[y][x])) return true;
         else return false;
     }
 
@@ -170,7 +172,7 @@ public class CheckersEngine {
         String b = "";
         for (int y = 0; y < board.length; y++) {
             for (int x = 0; x < board[y].length; x++) {
-                if (board[y][x] == 1 || board[y][x] == 6) {
+                if (board[y][x] == GOOD_PLAYER || board[y][x] == ENEMY_PLAYER) {
                     b += " " + board[y][x] + ",";
                 } else if (board[y][x] == 0) {
                     b += " *,";
@@ -338,4 +340,3 @@ public class CheckersEngine {
         return allPossibleBoards;
     }
 }
-
