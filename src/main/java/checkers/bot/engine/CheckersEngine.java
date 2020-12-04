@@ -87,6 +87,19 @@ public class CheckersEngine {
         return num < 0;
     }
 
+    private boolean isEnemyQueenPosition(int figureKey, int y) {
+        if (dir == 1 && y == (ROW - 1) && figureKey > 0) return true;
+        else if (dir == -1 && y == 0 && figureKey < 0) return true;
+        else return false;
+    }
+
+    private int[][] transformToQueen(int[][] board, int figureKey, int posX, int posY, int x, int y) {
+        board[posX][posY] = FREE_CELL;
+        board[x][y] = figureKey * 10;
+        return board;
+    }
+
+
     private boolean isEnemyForward(int[][] board, int posX, int posY, int x, int y) {
         if (isPositiveNum(board[posX][posY]) && isNegativeNumber(board[x][y])) return true;
         else if (isNegativeNumber(board[posX][posY]) && isPositiveNum(board[x][y])) return true;
@@ -129,16 +142,54 @@ public class CheckersEngine {
         return pos;
     }
 
-    private boolean isCanKillEnemy(int[][] board, int[] pos) {
-        int x = pos[0];
-        int y = pos[1];
-        return isPossibleX(x) && isPossibleY(y),isFreePosition(board, x, y);
+    private boolean isCanKillEnemy(int[][] board, int x, int y) {
+        return isPossibleX(x) && isPossibleY(y) && isFreePosition(board, x, y);
     }
 
-    private int[][] killEnemy(int[][] board, int figureKey, int posX, int posY, int x, int y) {
+    private int[][] killEnemy(int[][] board, int figureKey, int posX, int posY, int oldX, int oldY, int x, int y) {
         board[posX][posY] = FREE_CELL;
         board[x][y] = FREE_CELL;
-        board[x][y] = figureKey
+        board[oldX][oldY] = FREE_CELL; // todo may change to killed enemy number - 6 for example ?
+        board[x][y] = figureKey;
+        return board;
+    }
+
+    private int[][] continueKillEnemy(int[][] board, int[][] steps, int figureKey, int posX, int posY) {
+        int[][] newBoard = board.clone();
+        for (int i = 0; i < steps.length; i++) {
+            int x = steps[i][0];
+            int y = steps[i][1];
+            if (isPossibleX(x) && isPossibleY(y) && isEnemyForward(board, posX, posY, x, y)) {
+                int oldX = x;
+                int oldY = y;
+                int[] pos = getPositionAfterFight(board, posX, posY, x, y);
+                x = pos[0];
+                y = pos[1];
+                if (isCanKillEnemy(board, x, y)) {
+                    if (isEnemyQueenPosition(figureKey, y)) {
+                        // when we are simple player and we can transform to queen
+                        if (steps.length == 2) {
+                            newBoard = transformToQueen(board, figureKey * 10, posX, posY, x, y);
+                        }
+                        // when we are queen and we can`t transform to queen
+                        else {
+                            newBoard = killEnemy(board, figureKey, posX, posY, oldX, oldY, x, y);
+                            posX = x;
+                            posY = y;
+                            steps = getPossibleSteps(getNumOfPossibleSteps(figureKey), posX, posY);
+                            newBoard = continueKillEnemy(newBoard, steps, figureKey, posX, posY);
+                        }
+                    } else {
+                        newBoard = killEnemy(board, figureKey, posX, posY, oldX, oldY, x, y);
+                        posX = x;
+                        posY = y;
+                        steps = getPossibleSteps(getNumOfPossibleSteps(figureKey), posX, posY);
+                        newBoard = continueKillEnemy(newBoard, steps, figureKey, posX, posY);
+                    }
+                }
+            }
+        }
+        return newBoard;
     }
 
     //
@@ -150,18 +201,61 @@ public class CheckersEngine {
             int x = steps[i][0];
             int y = steps[i][1];
             if (isPossibleX(x) && isPossibleY(y)) {
+                // when next step is free cell
                 if (isFreePosition(board, x, y)) {
-                    int[][] newBoard = doStepForward(board, figureKey, posX, posY, x, y);
+                    int[][] newBoard;
+                    // when free position is enemy queen position
+                    if (isEnemyQueenPosition(figureKey, y)) {
+                        // when we are simple player and we can transform to queen
+                        if (steps.length == 2) {
+                            newBoard = transformToQueen(board, figureKey, posX, posY, x, y);
+                        }
+                        // when we are queen and we can`t transform to queen
+                        else {
+                            newBoard = doStepForward(board, figureKey, posX, posY, x, y);
+                        }
+                    }
+                    // when only simple free position
+                    else {
+                        newBoard = doStepForward(board, figureKey, posX, posY, x, y);
+                    }
                     boards.add(newBoard);
                 }
-                if (isEnemyForward(board, posX, posY, x, y)) {
-                    if (isCanKillEnemy(board, getPositionAfterFight(board, posX, posY, x, y))) {
-                        // todo recurtion
+                // if position isn`t free and there stay enemy
+                else if (isEnemyForward(board, posX, posY, x, y)) {
+                    int oldX = x;
+                    int oldY = y;
+                    int[] pos = getPositionAfterFight(board, posX, posY, x, y);
+                    x = pos[0];
+                    y = pos[1];
+                    if (isCanKillEnemy(board, x, y)) {
+                        int[][] newBoard;
+                        if (isEnemyQueenPosition(figureKey, y)) {
+                            // when we are simple player and we can transform to queen
+                            if (steps.length == 2) {
+                                newBoard = transformToQueen(board, figureKey * 10, posX, posY, x, y);
+                            }
+                            // when we are queen and we can`t transform to queen
+                            else {
+                                newBoard = killEnemy(board, figureKey, posX, posY, oldX, oldY, x, y);
+                                posX = x;
+                                posY = y;
+                                steps = getPossibleSteps(getNumOfPossibleSteps(figureKey), posX, posY);
+                                newBoard = continueKillEnemy(newBoard, steps, figureKey, posX, posY);
+                            }
+                        } else {
+                            newBoard = killEnemy(board, figureKey, posX, posY, oldX, oldY, x, y);
+                            posX = x;
+                            posY = y;
+                            steps = getPossibleSteps(getNumOfPossibleSteps(figureKey), posX, posY);
+                            newBoard = continueKillEnemy(newBoard, steps, figureKey, posX, posY);
+                        }
+                        boards.add(newBoard);
                     }
                 }
             }
         }
-
+        return boards;
     }
 
 
@@ -172,6 +266,7 @@ public class CheckersEngine {
 //        for (int i = 0; i < posMoving; i++) {
 //
 //        }
+        return new int[][]{};
     }
 
     public Object[] sendVariableMap(int figureKey) {
