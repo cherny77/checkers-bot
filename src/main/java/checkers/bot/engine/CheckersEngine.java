@@ -88,10 +88,10 @@ public class CheckersEngine {
     private boolean isNegativeNumber(int num) {
         return num < 0;
     }
-
+// todo dangerous zone
     private boolean isEnemyQueenPosition(int figureKey, int y) {
-        if (dir == 1 && y == (ROW - 1) && figureKey > 0) return true;
-        else if (dir == -1 && y == 0 && figureKey < 0) return true;
+        if (dir == 1 && y == (ROW - 1) && figureKey < 0) return true;
+        else if (dir == -1 && y == 0 && figureKey > 0) return true;
         else return false;
     }
 
@@ -172,7 +172,7 @@ public class CheckersEngine {
                     if (isEnemyQueenPosition(figureKey, y)) {
                         // when we are simple player and we can transform to queen
                         if (steps.length == 2) {
-                            newBoard = transformToQueen(board, figureKey * 10, posX, posY, x, y);
+                            newBoard = transformToQueen(board, figureKey, posX, posY, x, y);
                         }
                         // when we are queen and we can`t transform to queen
                         else {
@@ -236,7 +236,7 @@ public class CheckersEngine {
                         if (isEnemyQueenPosition(figureKey, y)) {
                             // when we are simple player and we can transform to queen
                             if (steps.length == 2) {
-                                newBoard = transformToQueen(board, figureKey * 10, posX, posY, x, y);
+                                newBoard = transformToQueen(board, figureKey, posX, posY, x, y);
                             }
                             // when we are queen and we can`t transform to queen
                             else {
