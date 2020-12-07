@@ -1,5 +1,7 @@
 package checkers.bot.dto;
 
+//import checkers.bot.util.BordItemDeserializer;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
@@ -25,11 +27,12 @@ public class GetGameInfoResponse {
         this.data = data;
     }
 
-    class Data {
+
+    public static class Data {
         private String status;
         private String whose_turn;
         private String winner;
-        private List<BordItem> board;
+        private List<BoardItem> board;
         private double available_time;
         private boolean is_started;
         private boolean is_finished;
@@ -59,6 +62,14 @@ public class GetGameInfoResponse {
             this.winner = winner;
         }
 
+        public List<BoardItem> getBoard() {
+            return board;
+        }
+
+        public void setBoard(List<BoardItem> board) {
+            this.board = board;
+        }
+
         public double getAvailable_time() {
             return available_time;
         }
@@ -83,33 +94,28 @@ public class GetGameInfoResponse {
             this.is_finished = is_finished;
         }
 
-        public List<BordItem> getBoard() {
-            return board;
-        }
-
-        public void setBoard(List<BordItem> board) {
-            this.board = board;
-        }
-
         @Override
         public String toString() {
-            return "GetGameInfoResponse{" +
+            return "Data{" +
                     "status='" + status + '\'' +
-                    ", whoseTurn='" + whose_turn + '\'' +
+                    ", whose_turn='" + whose_turn + '\'' +
                     ", winner='" + winner + '\'' +
                     ", board=" + board +
-                    ", availableTime=" + available_time +
-                    ", isStarted=" + is_started +
-                    ", isFinished=" + is_finished +
+                    ", available_time=" + available_time +
+                    ", is_started=" + is_started +
+                    ", is_finished=" + is_finished +
                     '}';
         }
 
-        public class BordItem {
+        public static class BoardItem {
             private String color;
             private int row;
             private int column;
-            private boolean isKing;
+            private boolean king;
             private int position;
+
+            public BoardItem() {
+            }
 
             public String getColor() {
                 return color;
@@ -136,11 +142,11 @@ public class GetGameInfoResponse {
             }
 
             public boolean isKing() {
-                return isKing;
+                return king;
             }
 
             public void setKing(boolean king) {
-                isKing = king;
+                this.king = king;
             }
 
             public int getPosition() {
@@ -153,11 +159,11 @@ public class GetGameInfoResponse {
 
             @Override
             public String toString() {
-                return "Checker{" +
+                return "BordItem{" +
                         "color='" + color + '\'' +
                         ", row=" + row +
                         ", column=" + column +
-                        ", isKing=" + isKing +
+                        ", king=" + king +
                         ", position=" + position +
                         '}';
             }
@@ -174,5 +180,6 @@ public class GetGameInfoResponse {
                 '}';
     }
 }
+
 
 
