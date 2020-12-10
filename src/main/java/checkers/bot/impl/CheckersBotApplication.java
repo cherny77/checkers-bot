@@ -1,6 +1,7 @@
 package checkers.bot.impl;
 
 import checkers.bot.ai.CheckersBotAi;
+import checkers.bot.ai.RandomHeuristic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +32,7 @@ public class CheckersBotApplication {
     public CommandLineRunner run(RestTemplate restTemplate) throws Exception {
         return args -> {
             System.out.println(serverUrl);
-            CheckersBot checkersBot = new CheckersBot("Name1", new CheckersBotAi(), serverUrl);
+            CheckersBot checkersBot = new CheckersBot("Name1", new CheckersBotAi(new RandomHeuristic()), serverUrl);
             checkersBot.connectToTheGame(restTemplate);
         };
     }
