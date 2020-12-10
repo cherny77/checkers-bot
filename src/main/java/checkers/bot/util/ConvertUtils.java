@@ -1,7 +1,7 @@
 package checkers.bot.util;
 
 import checkers.bot.dto.GetGameInfoResponse;
-import sun.jvm.hotspot.runtime.StaticBaseConstructor;
+//import sun.jvm.hotspot.runtime.StaticBaseConstructor;
 
 import java.util.List;
 

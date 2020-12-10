@@ -1,5 +1,7 @@
 package checkers.bot.engine;
 
+import checkers.bot.ai.Heuristic;
+
 import java.io.*;
 import java.util.ArrayList;
 

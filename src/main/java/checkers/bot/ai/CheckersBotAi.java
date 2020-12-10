@@ -18,7 +18,7 @@ public class CheckersBotAi implements ICheckersBotAi {
 
     @Override
     public void getNextStep(int[][] curState) {
-        CheckersEngine checkersEngine = new CheckersEngine(curState, 1);
+        CheckersEngine checkersEngine = new CheckersEngine(curState);
         ArrayList<ArrayList<int[][]>> newBoards = checkersEngine.getAllPossibleBoards(2);
         int maxGrade = 0;
         int[][] resMap;
