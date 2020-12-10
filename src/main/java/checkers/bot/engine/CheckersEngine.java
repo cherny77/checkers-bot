@@ -3,17 +3,10 @@ package checkers.bot.engine;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static checkers.bot.engine.Constants.*;
+
 public class CheckersEngine {
 
-    private static final int ROW = 8;
-    private static final int COL = 8;
-    private static final int FREE_CELL = 0;
-    private static final int CHECKER_STEPS_SIMPLE = 2;
-    private static final int CHECKER_STEPS_QUEEN = 4;
-    private static final int GOOD_PLAYER = 1;
-    private static final int GOOD_QUEEN = 11;
-    private static final int ENEMY_PLAYER = 2;
-    private static final int ENEMY_QUEEN = 22;
 
     private ArrayList<int[][]> futureBoards;
     private int[][] board;
