@@ -5,12 +5,22 @@ import java.util.ArrayList;
 
 public class MainTEST {
     public static void main(String[] args) throws IOException {
+        long timeStart = System.nanoTime();
         data_boards data = new data_boards();
         int[][] testingBoard = data.getBoard(7);
 
         CheckersEngine engine = new CheckersEngine(testingBoard);
         ArrayList<ArrayList<int[][]>> newBoards = engine.getAllPossibleBoards(1);
-        new MainTEST().writeResultToFile(testingBoard, newBoards);
+//        new MainTEST().writeResultToFile(testingBoard, newBoards);
+        for (int i = 0; i < newBoards.size(); i++) {
+            for (int j = 0; j < newBoards.get(i).size(); j++) {
+                Heuristic heuristic = new Heuristic(testingBoard, newBoards.get(i).get(j));
+                int value = heuristic.countDifficultHeuristics();
+                System.out.println(value);
+            }
+        }
+        long timeEnd = System.nanoTime();
+        System.out.println((timeEnd - timeStart) / 1_000_000 + " - milliseconds");
     }
 
     private void writeResultToFile(int[][] originBoard, ArrayList<ArrayList<int[][]>> boards) throws IOException {

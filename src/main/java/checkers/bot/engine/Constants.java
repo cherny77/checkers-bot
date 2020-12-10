@@ -10,4 +10,5 @@ public class Constants {
     public static final int GOOD_QUEEN = 11;
     public static final int ENEMY_PLAYER = 2;
     public static final int ENEMY_QUEEN = 22;
+    public static final int QUEEN_COEFF = 3;
 }
