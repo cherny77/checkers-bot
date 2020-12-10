@@ -12,8 +12,8 @@ public class CheckersEngine {
     private static final int CHECKER_STEPS_QUEEN = 4;
     private static final int GOOD_PLAYER = 1;
     private static final int GOOD_QUEEN = 11;
-    private static final int ENEMY_PLAYER = 2;
-    private static final int ENEMY_QUEEN = 22;
+    private static final int ENEMY_PLAYER = 3;
+    private static final int ENEMY_QUEEN = 33;
 
     private ArrayList<int[][]> futureBoards;
     private int[][] board;

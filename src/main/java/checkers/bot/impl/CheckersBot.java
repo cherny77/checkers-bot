@@ -31,6 +31,8 @@ public class CheckersBot {
 
         System.out.println(connectToTheGameResponseResponseEntity.getBody());
 
+
+
         ResponseEntity<GetGameInfoResponse> getGameInfoResponseResponseEntity
                 = restTemplate.getForEntity(serverUrl + "/game", GetGameInfoResponse.class);
 
@@ -39,7 +41,8 @@ public class CheckersBot {
     }
 
     public void getGameInfo(RestTemplate restTemplate) {
-
+        ResponseEntity<GetGameInfoResponse> getGameInfoResponseResponseEntity
+                = restTemplate.getForEntity(serverUrl + "/game", GetGameInfoResponse.class);
     }
 
     public void move(RestTemplate restTemplate) {
