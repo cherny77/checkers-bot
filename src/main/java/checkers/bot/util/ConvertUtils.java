@@ -12,8 +12,8 @@ public class ConvertUtils {
     public static final String RED = "RED";
     private static final int GOOD_PLAYER = 1;
     private static final int GOOD_QUEEN = 11;
-    private static final int ENEMY_PLAYER = 3;
-    private static final int ENEMY_QUEEN = 33;
+    private static final int ENEMY_PLAYER = 2;
+    private static final int ENEMY_QUEEN = 22;
 
     public static int[][] convertBoard(List<GetGameInfoResponse.Data.BoardItem> board, String color) {
         int[][] convertedBoard = new int[ROWS_NUMBER][COLUMN_NUMBER];
