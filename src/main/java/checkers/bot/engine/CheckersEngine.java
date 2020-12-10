@@ -5,20 +5,6 @@ import java.util.Arrays;
 
 public class CheckersEngine {
 
-    /**
-     * 1 - ми
-     * 10 - наша королева
-     * 0 - нічого
-     * -1 - ворог
-     * -10 - ворожа корорлева
-     * 6 - killed
-     * [[0,-1,0,-1,0,-1,0,-1]
-     * <p>
-     * <p>
-     * <p>
-     * ]
-     */
-
     private static final int ROW = 8;
     private static final int COL = 8;
     private static final int FREE_CELL = 0;
@@ -46,7 +32,6 @@ public class CheckersEngine {
         else return 4; // when figureKey == ENEMY_QUEEN
     }
 
-    // 2
     private int[][] getPossibleSteps(int checkerSteps, int x, int y) {
         int[][] steps;
         if (checkerSteps == CHECKER_STEPS_SIMPLE) {
@@ -82,14 +67,6 @@ public class CheckersEngine {
         tempBoard[posY][posX] = FREE_CELL;
         tempBoard[y][x] = figureKey;
         return tempBoard;
-    }
-
-    private boolean isPositiveNum(int num) {
-        return num > 0;
-    }
-
-    private boolean isNegativeNumber(int num) {
-        return num < 0;
     }
 
     // todo dangerous zone
@@ -163,26 +140,9 @@ public class CheckersEngine {
     private int[][] killEnemy(int[][] board, int figureKey, int posX, int posY, int oldX, int oldY, int x, int y) {
         int[][] tempBoard = Arrays.stream(board).map(int[]::clone).toArray(int[][]::new);
         tempBoard[posY][posX] = FREE_CELL;
-        tempBoard[oldY][oldX] = FREE_CELL; // todo may change to killed enemy number - 6 for example ?
+        tempBoard[oldY][oldX] = FREE_CELL;
         tempBoard[y][x] = figureKey;
         return tempBoard;
-    }
-
-    private String boardToString(int[][] board) {
-        String b = "";
-        for (int y = 0; y < board.length; y++) {
-            for (int x = 0; x < board[y].length; x++) {
-                if (board[y][x] == GOOD_PLAYER || board[y][x] == ENEMY_PLAYER) {
-                    b += " " + board[y][x] + ",";
-                } else if (board[y][x] == 0) {
-                    b += " *,";
-                } else {
-                    b += board[y][x] + ",";
-                }
-            }
-            b += "\n";
-        }
-        return b;
     }
 
     private boolean isUniqueBoards(int[][] a1, int[][] a2) {
@@ -319,7 +279,6 @@ public class CheckersEngine {
         return allPossibleBoards;
     }
 
-
     private ArrayList<int[][]> createBoardWithStep(int figureKey, int posX, int posY) {
 
         int checkerSteps = getNumOfPossibleSteps(figureKey);
@@ -330,12 +289,16 @@ public class CheckersEngine {
         return boards;
     }
 
+
     public ArrayList<ArrayList<int[][]>> getAllPossibleBoards(int figureKey) {
         ArrayList<ArrayList<int[][]>> allPossibleBoards = new ArrayList<>();
+        int queenKey = figureKey * 10 + figureKey;
         for (int y = 0; y < this.board.length; y++) {
             for (int x = 0; x < this.board[y].length; x++) {
                 if (this.board[y][x] == figureKey) {
                     allPossibleBoards.add(createBoardWithStep(figureKey, x, y));
+                } else if (this.board[y][x] == queenKey) {
+                    allPossibleBoards.add(createBoardWithStep(queenKey, x, y));
                 }
             }
         }
