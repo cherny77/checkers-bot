@@ -19,10 +19,9 @@ public class CheckersEngine {
     private int[][] board;
     private int dir;
 
-    public CheckersEngine(int[][] board, int dir) {
+    public CheckersEngine(int[][] board) {
         this.futureBoards = new ArrayList<>();
         this.board = board;
-        this.dir = dir;
     }
 
     private int getNumOfPossibleSteps(int figureKey) {
@@ -291,6 +290,7 @@ public class CheckersEngine {
 
 
     public ArrayList<ArrayList<int[][]>> getAllPossibleBoards(int figureKey) {
+        this.dir = figureKey == GOOD_PLAYER ? -1 : 1;
         ArrayList<ArrayList<int[][]>> allPossibleBoards = new ArrayList<>();
         int queenKey = figureKey * 10 + figureKey;
         for (int y = 0; y < this.board.length; y++) {
