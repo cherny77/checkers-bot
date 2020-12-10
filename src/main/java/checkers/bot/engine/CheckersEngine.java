@@ -140,7 +140,7 @@ public class CheckersEngine {
     private int[][] killEnemy(int[][] board, int figureKey, int posX, int posY, int oldX, int oldY, int x, int y) {
         int[][] tempBoard = Arrays.stream(board).map(int[]::clone).toArray(int[][]::new);
         tempBoard[posY][posX] = FREE_CELL;
-        tempBoard[oldY][oldX] = FREE_CELL; // todo may change to killed enemy number - 6 for example ?
+        tempBoard[oldY][oldX] = FREE_CELL;
         tempBoard[y][x] = figureKey;
         return tempBoard;
     }
@@ -290,16 +290,14 @@ public class CheckersEngine {
     }
 
 
-
     public ArrayList<ArrayList<int[][]>> getAllPossibleBoards(int figureKey) {
         ArrayList<ArrayList<int[][]>> allPossibleBoards = new ArrayList<>();
-        int queenKey = figureKey*10 + figureKey;
+        int queenKey = figureKey * 10 + figureKey;
         for (int y = 0; y < this.board.length; y++) {
             for (int x = 0; x < this.board[y].length; x++) {
                 if (this.board[y][x] == figureKey) {
                     allPossibleBoards.add(createBoardWithStep(figureKey, x, y));
-                }
-                else if (this.board[y][x] == queenKey) {
+                } else if (this.board[y][x] == queenKey) {
                     allPossibleBoards.add(createBoardWithStep(queenKey, x, y));
                 }
             }
