@@ -3,6 +3,7 @@ package checkers.bot.impl;
 import checkers.bot.api.ICheckersBotAi;
 import checkers.bot.dto.ConnectToTheGameResponse;
 import checkers.bot.dto.GetGameInfoResponse;
+import checkers.bot.util.ConvertUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -34,6 +35,7 @@ public class CheckersBot {
                 = restTemplate.getForEntity(serverUrl + "/game", GetGameInfoResponse.class);
 
         System.out.println(getGameInfoResponseResponseEntity.getBody());
+        ConvertUtils.printState(ConvertUtils.convertBoard(getGameInfoResponseResponseEntity.getBody().getData().getBoard(), connectToTheGameResponseResponseEntity.getBody().getData().getColor()));
     }
 
     public void getGameInfo(RestTemplate restTemplate) {
