@@ -4,7 +4,7 @@ import checkers.bot.engine.CheckersEngine;
 
 import java.util.ArrayList;
 
-import static checkers.bot.engine.Constants.*;
+import static checkers.bot.util.Constants.*;
 
 public class Heuristic {
     private int[][] board;
@@ -21,11 +21,11 @@ public class Heuristic {
     }
 
     public int countSimpleHeuristic() {
-        return boardCheckers[0] + boardCheckers[1] * QUEEN_COEFF - boardCheckers[2] - boardCheckers[3] * QUEEN_COEFF;
+        return boardCheckers[0] + boardCheckers[1] * QUEEN_KOEFF - boardCheckers[2] - boardCheckers[3] * QUEEN_KOEFF;
     }
 
     public int countDifficultHeuristics() {
-        return boardCheckers[0] + boardCheckers[1] * QUEEN_COEFF - boardCheckers[2] - boardCheckers[3] * QUEEN_COEFF
+        return boardCheckers[0] + boardCheckers[1] * QUEEN_KOEFF - boardCheckers[2] - boardCheckers[3] * QUEEN_KOEFF
                 + isBecomeQueen (originBoardCheckers, boardCheckers, 1)
                 + countHowManyWeHaveKilledEnemy(originBoardCheckers, boardCheckers, 2)
                 - countHowManyEnemyWillKillOwrCheckers(board);
@@ -33,8 +33,8 @@ public class Heuristic {
 
 
     private void countCheckers(int[][] board, int[] boardCheckers) {
-        for (int y = 0; y < ROW; y++) {
-            for (int x = 0; x < COL; x++) {
+        for (int y = 0; y < ROWS_NUMBER; y++) {
+            for (int x = 0; x < COLUMN_NUMBER; x++) {
                 if (board[y][x] == GOOD_PLAYER) {
                     boardCheckers[0]++;
                 } else if (board[y][x] == GOOD_QUEEN) {
@@ -61,10 +61,10 @@ public class Heuristic {
 
 
     private int countHowManyWeHaveKilledEnemy(int[] originBoardCheckers, int[] boardCheckers, int figurePosition) {
-        return originBoardCheckers[figurePosition] - boardCheckers[figurePosition] + (originBoardCheckers[figurePosition + 1] - boardCheckers[figurePosition + 1]) * QUEEN_COEFF;
+        return originBoardCheckers[figurePosition] - boardCheckers[figurePosition] + (originBoardCheckers[figurePosition + 1] - boardCheckers[figurePosition + 1]) * QUEEN_KOEFF;
     }
     private int isBecomeQueen(int[] originBoardCheckers, int[] boardCheckers, int queenPos){
-        return originBoardCheckers[queenPos] < boardCheckers[queenPos] ? QUEEN_COEFF : 0;
+        return originBoardCheckers[queenPos] < boardCheckers[queenPos] ? QUEEN_KOEFF : 0;
     }
 
     private int countHowManyEnemyWillKillOwrCheckers(int[][] board) {

@@ -3,7 +3,7 @@ package checkers.bot.engine;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static checkers.bot.engine.Constants.*;
+import static checkers.bot.util.Constants.*;
 
 public class CheckersEngine {
 
@@ -39,11 +39,11 @@ public class CheckersEngine {
     }
 
     private boolean isPossibleX(int x) {
-        return x >= 0 && x < COL;
+        return x >= 0 && x < COLUMN_NUMBER;
     }
 
     private boolean isPossibleY(int y) {
-        return y >= 0 && y < ROW;
+        return y >= 0 && y < ROWS_NUMBER;
     }
 
     private boolean isEven(int x) {
@@ -63,7 +63,7 @@ public class CheckersEngine {
 
     // todo dangerous zone
     private boolean isEnemyQueenPosition(int figureKey, int y) {
-        if (dir == 1 && y == (ROW - 1) && figureKey < 0) return true;
+        if (dir == 1 && y == (ROWS_NUMBER - 1) && figureKey < 0) return true;
         else if (dir == -1 && y == 0 && figureKey > 0) return true;
         else return false;
     }

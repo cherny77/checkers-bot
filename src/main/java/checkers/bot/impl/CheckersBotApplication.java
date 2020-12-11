@@ -12,6 +12,8 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.concurrent.CompletableFuture;
+
 @SpringBootApplication
 public class CheckersBotApplication {
 
@@ -32,8 +34,13 @@ public class CheckersBotApplication {
     public CommandLineRunner run(RestTemplate restTemplate) throws Exception {
         return args -> {
             System.out.println(serverUrl);
-            CheckersBot checkersBot = new CheckersBot("Name1", new CheckersBotAi(new RandomHeuristic()), serverUrl);
-            checkersBot.connectToTheGame(restTemplate);
+
+
+            CheckersBot checkersBot1 = new CheckersBot("Name1", new CheckersBotAi(new RandomHeuristic()), serverUrl);
+            CheckersBot checkersBot2 = new CheckersBot("Name2", new CheckersBotAi(new RandomHeuristic()), serverUrl);
+            CompletableFuture.runAsync(() -> checkersBot1.play(restTemplate));
+            CompletableFuture.runAsync(() -> checkersBot2.play(restTemplate));
+
         };
     }
 

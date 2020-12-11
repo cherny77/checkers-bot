@@ -1,6 +1,9 @@
 package checkers.bot.api;
 
-public interface ICheckersBotAi {
-    public void getNextStep(int curState[][]);
+import checkers.bot.util.Move;
 
+public interface ICheckersBotAi {
+    public Move getNextStep(int curState[][]);
+
+    void setColor(String color);
 }
