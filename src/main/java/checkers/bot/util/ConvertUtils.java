@@ -2,6 +2,8 @@ package checkers.bot.util;
 
 import checkers.bot.dto.GetGameInfoResponse;
 //import sun.jvm.hotspot.runtime.StaticBaseConstructor;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 import static checkers.bot.util.Constants.*;
@@ -89,5 +91,12 @@ public class ConvertUtils {
         return new Move(from, to);
     }
 
+
+    public static ArrayList<int [][]> uniteBords(ArrayList<ArrayList<int [][]>> boards){
+        ArrayList<int [][]> united = new ArrayList<>();
+        for (ArrayList<int[][]> b : boards)
+            united.addAll(b);
+        return united;
+    }
 
 }

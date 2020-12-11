@@ -1,5 +1,7 @@
 package checkers.bot.engine;
 
+import checkers.bot.util.ConvertUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -329,5 +331,10 @@ public class CheckersEngine {
             }
         }
         return allPossibleBoardsFinal;
+    }
+
+
+    public ArrayList<int[][]> getPossibleBoards(int figureKey) {
+        return ConvertUtils.uniteBords(getAllPossibleBoards(figureKey));
     }
 }
