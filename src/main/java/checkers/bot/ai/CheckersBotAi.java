@@ -6,7 +6,7 @@ import checkers.bot.engine.CheckersEngine;
 import checkers.bot.util.ConvertUtils;
 import checkers.bot.util.Move;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class CheckersBotAi implements ICheckersBotAi {
     public static int DEPTH = 3;
@@ -40,4 +40,49 @@ public class CheckersBotAi implements ICheckersBotAi {
         }
         return ConvertUtils.getStepByTwoBoards(curState, resMap, color);
     }
+
+//    public int[][] MiniMax(int[][] curState, int depth, boolean isMax) {
+//        if (depth == 0)
+//            return curState;
+//
+//        CheckersEngine checkersEngine = new CheckersEngine(curState);
+//        ArrayList<ArrayList<int[][]>> newBoards = checkersEngine.getAllPossibleBoards(1);
+//        List<int[][]> possibleMoves = new ArrayList<>();
+//        for (ArrayList<int[][]> boards : newBoards)
+//            possibleMoves.addAll(boards);
+//        if (isMax)
+//        {
+//            Map<int[][], Integer> vals = new HashMap<>();
+//            for (int[][] board : possibleMoves)
+//            {
+//                vals.put(board, heuristic.estimate(board));
+//            }
+//
+//            int maxVal = Collections.max(vals.values());
+//
+//            List<int[][]> possVals = new ArrayList<>();
+//            for (int[][] n : possibleMoves)
+//            {
+//                if (vals.get(n) == maxVal) possVals.add(n);
+//            }
+//
+//            return GetRandomElement(possVals);
+//        }
+//
+//        else
+//        {
+//            IDictionary<(int, int), int> vals = new Dictionary<(int, int), int>();
+//            foreach ((int, int) n in possibleMoves)
+//            {
+//                vals.Add(n, weights[Minimax(depth - 1, n, true, grid, weights, entity)]);
+//            }
+//
+//            int minVal = vals.Values.Min();
+//            IList<(int, int)> possVals = new List<(int, int)>();
+//            foreach ((int, int) n in possibleMoves)
+//            {
+//                if (vals[n] == minVal) possVals.Add(n);
+//            }
+//            return GetRandomElement(possVals);
+//    }
 }
