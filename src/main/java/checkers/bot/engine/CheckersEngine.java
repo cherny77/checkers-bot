@@ -8,12 +8,12 @@ import static checkers.bot.engine.Constants.*;
 public class CheckersEngine {
 
 
-    private ArrayList<int[][]> futureBoards;
     private int[][] board;
     private int dir;
+    boolean canKill = false;
+    ArrayList<ArrayList<int[][]>> allPossibleBoardsFinal;
 
     public CheckersEngine(int[][] board) {
-        this.futureBoards = new ArrayList<>();
         this.board = board;
     }
 
@@ -147,7 +147,6 @@ public class CheckersEngine {
         return false;
     }
 
-    // todo problems with newBoard -> after step it rewrite
     private void continueKillEnemy(ArrayList<int[][]> bList, int[][] board, int[][] steps, int figureKey, int posX, int posY) {
         int[][] newBoard = Arrays.stream(board).map(int[]::clone).toArray(int[][]::new);
 
@@ -188,9 +187,6 @@ public class CheckersEngine {
                 }
             }
         }
-//        System.out.println("~~~~~~~~~~~~~~~~~~~~");
-//        System.out.println(boardToString(newBoard));
-//        System.out.println("|||||||||||||||||||");
         if (bList.size() > 0 && isUniqueBoards(bList.get(bList.size() - 1), newBoard)) {
             bList.add(newBoard);
         } else if (bList.size() == 0) {
@@ -198,10 +194,46 @@ public class CheckersEngine {
         }
     }
 
-    private ArrayList<int[][]> doStep(int[][] board, int[][] steps, int figureKey, int posX, int posY) {
+    // todo code prosto ujas
+    private void isCheckersCanKill(int figureKey) {
+        for (int y = 0; y < this.board.length; y++) {
+            for (int x = 0; x < this.board[y].length; x++) {
+                if (canKill)
+                    return;
+                if (this.board[y][x] == figureKey) {
+                    int checkerSteps = getNumOfPossibleSteps(figureKey);
+                    int[][] steps = getPossibleSteps(checkerSteps, x, y);
+                    isCanKill(this.board, steps, figureKey, x, y);
+                } else if (this.board[y][x] == figureKey * 10 + figureKey) {
+                    int checkerSteps = getNumOfPossibleSteps(figureKey);
+                    int[][] steps = getPossibleSteps(checkerSteps, x, y);
+                    isCanKill(this.board, steps, figureKey, x, y);
+                }
 
+            }
+        }
+    }
+
+    // todo code prosto ujas
+    private void isCanKill(int[][] board, int[][] steps, int figureKey, int posX, int posY) {
+        for (int i = 0; i < steps.length; i++) {
+            int x = steps[i][0];
+            int y = steps[i][1];
+            if (isPossibleX(x) && isPossibleY(y)&&isEnemyForward(board, posX, posY, x, y)) {
+                int oldX = x;
+                int oldY = y;
+                int[] pos = getPositionAfterFight(board, posX, posY, x, y);
+                x = pos[0];
+                y = pos[1];
+                if (isCanKillEnemy(board, x, y)) {
+                    canKill = true;
+                }
+            }
+        }
+    }
+
+    private ArrayList<int[][]> doStep(int[][] board, int[][] steps, int figureKey, int posX, int posY) {
         ArrayList<int[][]> allPossibleBoards = new ArrayList<>();
-        // todo
         ArrayList<int[][]> bList = new ArrayList<>();
 
         for (int i = 0; i < steps.length; i++) {
@@ -227,7 +259,8 @@ public class CheckersEngine {
                     else {
                         newBoard = doStepForward(board, figureKey, posX, posY, x, y);
                     }
-                    allPossibleBoards.add(newBoard);
+                    if (!canKill)
+                        allPossibleBoards.add(newBoard);
                 }
                 // if position isn`t free and there stay enemy
                 else if (isEnemyForward(board, posX, posY, x, y)) {
@@ -237,6 +270,9 @@ public class CheckersEngine {
                     x = pos[0];
                     y = pos[1];
                     if (isCanKillEnemy(board, x, y)) {
+                        if (!canKill) {
+                            allPossibleBoards = new ArrayList<>();
+                        }
                         int[][] newBoard;
                         if (isEnemyQueenPosition(figureKey, y)) {
                             // when we are simple player and we can transform to queen
@@ -257,9 +293,6 @@ public class CheckersEngine {
                             continueKillEnemy(bList, newBoard, newSteps, figureKey, x, y);
 
                         }
-//                        System.out.println("----------------------------");
-//                        System.out.println(boardToString(newBoard));
-//                        System.out.println("----------------------------");
                     }
                 }
             }
@@ -281,20 +314,20 @@ public class CheckersEngine {
         return boards;
     }
 
-
     public ArrayList<ArrayList<int[][]>> getAllPossibleBoards(int figureKey) {
         this.dir = figureKey == GOOD_PLAYER ? -1 : 1;
-        ArrayList<ArrayList<int[][]>> allPossibleBoards = new ArrayList<>();
+        allPossibleBoardsFinal = new ArrayList<>();
         int queenKey = figureKey * 10 + figureKey;
+        isCheckersCanKill(figureKey);
         for (int y = 0; y < this.board.length; y++) {
             for (int x = 0; x < this.board[y].length; x++) {
                 if (this.board[y][x] == figureKey) {
-                    allPossibleBoards.add(createBoardWithStep(figureKey, x, y));
+                    allPossibleBoardsFinal.add(createBoardWithStep(figureKey, x, y));
                 } else if (this.board[y][x] == queenKey) {
-                    allPossibleBoards.add(createBoardWithStep(queenKey, x, y));
+                    allPossibleBoardsFinal.add(createBoardWithStep(queenKey, x, y));
                 }
             }
         }
-        return allPossibleBoards;
+        return allPossibleBoardsFinal;
     }
 }
