@@ -9,7 +9,7 @@ import checkers.bot.util.Move;
 import java.util.*;
 
 public class CheckersBotAi implements ICheckersBotAi {
-    public static int DEPTH = 2;
+    public static int DEPTH = 3;
     private IHeuristic heuristic;
     private String color;
 

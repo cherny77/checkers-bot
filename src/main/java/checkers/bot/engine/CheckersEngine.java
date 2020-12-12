@@ -86,8 +86,8 @@ public class CheckersEngine {
     }
 
     private boolean isEnemyForward(int[][] board, int posX, int posY, int x, int y) {
-        if (!isEven(board[posY][posX]) && isEven(board[y][x])) return true;
-        else if (isEven(board[posY][posX]) && !isEven(board[y][x])) return true;
+        if (!isEven(board[posY][posX]) && isEven(board[y][x]) && board[y][x]!= 0) return true;
+        else if (isEven(board[posY][posX]) && !isEven(board[y][x]) && board[y][x]!= 0) return true;
         else return false;
     }
 
@@ -221,7 +221,7 @@ public class CheckersEngine {
         for (int i = 0; i < steps.length; i++) {
             int x = steps[i][0];
             int y = steps[i][1];
-            if (isPossibleX(x) && isPossibleY(y)&&isEnemyForward(board, posX, posY, x, y)) {
+            if (isPossibleX(x) && isPossibleY(y) && isEnemyForward(board, posX, posY, x, y)) {
                 int oldX = x;
                 int oldY = y;
                 int[] pos = getPositionAfterFight(board, posX, posY, x, y);
@@ -317,6 +317,7 @@ public class CheckersEngine {
     }
 
     public ArrayList<ArrayList<int[][]>> getAllPossibleBoards(int figureKey) {
+        canKill = false;
         this.dir = figureKey == GOOD_PLAYER ? -1 : 1;
         allPossibleBoardsFinal = new ArrayList<>();
         int queenKey = figureKey * 10 + figureKey;
