@@ -38,7 +38,7 @@ public class CheckersBot {
                 move(restTemplate, getGameInfoResponse.getData().getBoard());
 
             try {
-                TimeUnit.MILLISECONDS.sleep(600l);
+                TimeUnit.MILLISECONDS.sleep(800l);
             } catch (InterruptedException e) {
             }
         }
@@ -80,7 +80,7 @@ public class CheckersBot {
             System.out.println("Response: " + response.getBody().getData());
         } catch (Exception e) {
             e.printStackTrace();
-            isFinished = true;
+            move(restTemplate, board);
         }
     }
 
