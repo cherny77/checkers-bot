@@ -38,8 +38,8 @@ public class CheckersBotApplication {
             System.out.println(serverUrl);
 
 
-            CheckersBot checkersBot1 = new CheckersBot("Name1", new CheckersBotAi(new SimpleHeuristic()), serverUrl);
-            CheckersBot checkersBot2 = new CheckersBot("Name2", new CheckersBotAi(new DifficultHeuristic()), serverUrl);
+            CheckersBot checkersBot1 = new CheckersBot("Name1", new CheckersBotAi(new SimpleHeuristic(), new RandomHeuristic()), serverUrl);
+            CheckersBot checkersBot2 = new CheckersBot("Name2", new CheckersBotAi(new DifficultHeuristic(), new SimpleHeuristic()), serverUrl);
             CompletableFuture.runAsync(() -> checkersBot1.play(restTemplate));
             CompletableFuture.runAsync(() -> checkersBot2.play(restTemplate));
 
