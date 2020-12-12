@@ -12,9 +12,7 @@ public class EnemyHeuristics implements IHeuristic {
     private int[] boardCheckers = new int[]{0, 0, 0, 0};
     private int[] originBoardCheckers = new int[]{0, 0, 0, 0};
 
-    public EnemyHeuristics(int[][] originBoard) {
-        this.originBoard = originBoard;
-        countCheckers(this.originBoard, boardCheckers);
+    public EnemyHeuristics() {
     }
 
     @Override
