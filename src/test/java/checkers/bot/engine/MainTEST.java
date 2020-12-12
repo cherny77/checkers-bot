@@ -9,10 +9,10 @@ public class MainTEST {
     public static void main(String[] args) throws IOException {
         long timeStart = System.nanoTime();
         data_boards data = new data_boards();
-        int[][] testingBoard = data.getBoard(10);
+        int[][] testingBoard = data.getBoard(0);
 
         CheckersEngineTest engine = new CheckersEngineTest(testingBoard);
-        ArrayList<ArrayList<int[][]>> newBoards = engine.getAllPossibleBoards(2);
+        ArrayList<ArrayList<int[][]>> newBoards = engine.getAllPossibleBoards(1);
         new MainTEST().writeResultToFile(testingBoard, newBoards);
         for (int i = 0; i < newBoards.size(); i++) {
             for (int j = 0; j < newBoards.get(i).size(); j++) {
