@@ -219,7 +219,7 @@ public class CheckersEngineTest {
         for (int i = 0; i < steps.length; i++) {
             int x = steps[i][0];
             int y = steps[i][1];
-            if (isPossibleX(x) && isPossibleY(y)&&isEnemyForward(board, posX, posY, x, y)) {
+            if (isPossibleX(x) && isPossibleY(y) && isEnemyForward(board, posX, posY, x, y)) {
                 int oldX = x;
                 int oldY = y;
                 int[] pos = getPositionAfterFight(board, posX, posY, x, y);
@@ -278,29 +278,29 @@ public class CheckersEngineTest {
                             // when we are simple player and we can transform to queen
                             if (steps.length == 2) {
                                 newBoard = transformToQueen(board, figureKey, posX, posY, oldX, oldY, x, y);
-                                allPossibleBoards.add(newBoard);
+//                                allPossibleBoards.add(newBoard);
                             }
                             // when we are queen and we can`t transform to queen
                             else {
                                 newBoard = killEnemy(board, figureKey, posX, posY, oldX, oldY, x, y);
-                                int[][] newSteps = getPossibleSteps(getNumOfPossibleSteps(figureKey), x, y);
-
-                                continueKillEnemy(bList, newBoard, newSteps, figureKey, x, y);
+//                                int[][] newSteps = getPossibleSteps(getNumOfPossibleSteps(figureKey), x, y);
+//                                continueKillEnemy(bList, newBoard, newSteps, figureKey, x, y);
                             }
                         } else {
                             newBoard = killEnemy(board, figureKey, posX, posY, oldX, oldY, x, y);
-                            int[][] newSteps = getPossibleSteps(getNumOfPossibleSteps(figureKey), x, y);
-                            continueKillEnemy(bList, newBoard, newSteps, figureKey, x, y);
+//                            int[][] newSteps = getPossibleSteps(getNumOfPossibleSteps(figureKey), x, y);
+//                            continueKillEnemy(bList, newBoard, newSteps, figureKey, x, y);
 
                         }
+                        allPossibleBoards.add(newBoard);
                     }
                 }
             }
         }
 
-        for (int i = 0; i < bList.size(); i++) {
-            allPossibleBoards.add(bList.get(i));
-        }
+//        for (int i = 0; i < bList.size(); i++) {
+//            allPossibleBoards.add(bList.get(i));
+//        }
         return allPossibleBoards;
     }
 

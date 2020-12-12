@@ -9,7 +9,7 @@ public class MainTEST {
     public static void main(String[] args) throws IOException {
         long timeStart = System.nanoTime();
         data_boards data = new data_boards();
-        int[][] testingBoard = data.getBoard(4);
+        int[][] testingBoard = data.getBoard(8);
 
         CheckersEngineTest engine = new CheckersEngineTest(testingBoard);
         ArrayList<ArrayList<int[][]>> newBoards = engine.getAllPossibleBoards(1);
