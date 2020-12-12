@@ -13,8 +13,10 @@ public class RandomHeuristic implements IHeuristic {
         random = new Random();
     }
 
+
+
     @Override
-    public int estimate(int[][] state) {
+    public int estimate(int[][] original, int[][] state) {
         return random.nextInt(MAX_GRADE - MIN_GRADE + 1) + MIN_GRADE;
     }
 }

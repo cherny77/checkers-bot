@@ -26,19 +26,6 @@ public class CheckersBotAi implements ICheckersBotAi {
     @Override
     public Move getNextStep(int[][] curState) {
         int[][] resMap = miniMax(curState, DEPTH, true);
-//        CheckersEngine checkersEngine = new CheckersEngine(curState);
-//        ArrayList<ArrayList<int[][]>> newBoards = checkersEngine.getAllPossibleBoards(1);
-//        int maxGrade = -1;
-//        int[][] resMap = null;
-//        for (ArrayList<int[][]> a : newBoards) {
-//            for (int[][] board : a) {
-//                int currentGrade = heuristic.estimate(board);
-//                if (currentGrade > maxGrade || resMap == null) {
-//                    maxGrade = currentGrade;
-//                    resMap = board;
-//                }
-//            }
-//        }
         return ConvertUtils.getStepByTwoBoards(curState, resMap, color);
     }
 
@@ -56,7 +43,7 @@ public class CheckersBotAi implements ICheckersBotAi {
         List<int[][]> possVals = new ArrayList<>();
         if (isMax) {
             for (int[][] board : possibleMoves) {
-                vals.put(board, heuristic.estimate(this.miniMax(board, depth - 1, false)));
+                vals.put(board, heuristic.estimate(curState, this.miniMax(board, depth - 1, false)));
             }
             int maxVal = Collections.max(vals.values());
             for (int[][] n : possibleMoves) {
@@ -64,7 +51,7 @@ public class CheckersBotAi implements ICheckersBotAi {
             }
         } else {
             for (int[][] board : possibleMoves) {
-                vals.put(board, heuristic.estimate(this.miniMax(board, depth - 1, true)));
+                vals.put(board, heuristic.estimate(curState, this.miniMax(board, depth - 1, true)));
             }
             int minVal = Collections.min(vals.values());
             for (int[][] n : possibleMoves) {

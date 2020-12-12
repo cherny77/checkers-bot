@@ -38,7 +38,7 @@ public class CheckersBot {
                 move(restTemplate, getGameInfoResponse.getData().getBoard());
 
             try {
-                TimeUnit.MILLISECONDS.sleep(1000l);
+                TimeUnit.MILLISECONDS.sleep(600l);
             } catch (InterruptedException e) {
             }
         }
