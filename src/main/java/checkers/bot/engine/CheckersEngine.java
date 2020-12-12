@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import static checkers.bot.util.Constants.*;
 
+
 public class CheckersEngine {
 
 
@@ -197,7 +198,7 @@ public class CheckersEngine {
     }
 
     // todo code prosto ujas
-    private void isCheckersCanKill(int figureKey) {
+    private void isCheckersCanKill(int figureKey, int queenKey) {
         for (int y = 0; y < this.board.length; y++) {
             for (int x = 0; x < this.board[y].length; x++) {
                 if (canKill)
@@ -206,10 +207,10 @@ public class CheckersEngine {
                     int checkerSteps = getNumOfPossibleSteps(figureKey);
                     int[][] steps = getPossibleSteps(checkerSteps, x, y);
                     isCanKill(this.board, steps, figureKey, x, y);
-                } else if (this.board[y][x] == figureKey * 10 + figureKey) {
-                    int checkerSteps = getNumOfPossibleSteps(figureKey);
+                } else if (this.board[y][x] == queenKey) {
+                    int checkerSteps = getNumOfPossibleSteps(queenKey);
                     int[][] steps = getPossibleSteps(checkerSteps, x, y);
-                    isCanKill(this.board, steps, figureKey, x, y);
+                    isCanKill(this.board, steps, queenKey, x, y);
                 }
 
             }
@@ -321,7 +322,7 @@ public class CheckersEngine {
         this.dir = figureKey == GOOD_PLAYER ? -1 : 1;
         allPossibleBoardsFinal = new ArrayList<>();
         int queenKey = figureKey * 10 + figureKey;
-        isCheckersCanKill(figureKey);
+        isCheckersCanKill(figureKey, queenKey);
         for (int y = 0; y < this.board.length; y++) {
             for (int x = 0; x < this.board[y].length; x++) {
                 if (this.board[y][x] == figureKey) {

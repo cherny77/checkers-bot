@@ -1,9 +1,12 @@
 package checkers.bot.engine;
 
+import checkers.bot.util.ConvertUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static checkers.bot.engine.Constants.*;
+import static checkers.bot.util.Constants.*;
+
 
 public class CheckersEngineTest {
 
@@ -39,11 +42,11 @@ public class CheckersEngineTest {
     }
 
     private boolean isPossibleX(int x) {
-        return x >= 0 && x < COL;
+        return x >= 0 && x < COLUMN_NUMBER;
     }
 
     private boolean isPossibleY(int y) {
-        return y >= 0 && y < ROW;
+        return y >= 0 && y < ROWS_NUMBER;
     }
 
     private boolean isEven(int x) {
@@ -63,7 +66,7 @@ public class CheckersEngineTest {
 
     // todo dangerous zone
     private boolean isEnemyQueenPosition(int figureKey, int y) {
-        if (dir == 1 && y == (ROW - 1) && figureKey < 0) return true;
+        if (dir == 1 && y == (ROWS_NUMBER - 1) && figureKey < 0) return true;
         else if (dir == -1 && y == 0 && figureKey > 0) return true;
         else return false;
     }
@@ -84,8 +87,8 @@ public class CheckersEngineTest {
     }
 
     private boolean isEnemyForward(int[][] board, int posX, int posY, int x, int y) {
-        if (!isEven(board[posY][posX]) && isEven(board[y][x])) return true;
-        else if (isEven(board[posY][posX]) && !isEven(board[y][x])) return true;
+        if (!isEven(board[posY][posX]) && isEven(board[y][x]) && board[y][x]!= 0) return true;
+        else if (isEven(board[posY][posX]) && !isEven(board[y][x]) && board[y][x]!= 0) return true;
         else return false;
     }
 
@@ -195,7 +198,7 @@ public class CheckersEngineTest {
     }
 
     // todo code prosto ujas
-    private void isCheckersCanKill(int figureKey) {
+    private void isCheckersCanKill(int figureKey, int queenKey) {
         for (int y = 0; y < this.board.length; y++) {
             for (int x = 0; x < this.board[y].length; x++) {
                 if (canKill)
@@ -204,10 +207,10 @@ public class CheckersEngineTest {
                     int checkerSteps = getNumOfPossibleSteps(figureKey);
                     int[][] steps = getPossibleSteps(checkerSteps, x, y);
                     isCanKill(this.board, steps, figureKey, x, y);
-                } else if (this.board[y][x] == figureKey * 10 + figureKey) {
-                    int checkerSteps = getNumOfPossibleSteps(figureKey);
+                } else if (this.board[y][x] == queenKey) {
+                    int checkerSteps = getNumOfPossibleSteps(queenKey);
                     int[][] steps = getPossibleSteps(checkerSteps, x, y);
-                    isCanKill(this.board, steps, figureKey, x, y);
+                    isCanKill(this.board, steps, queenKey, x, y);
                 }
 
             }
@@ -315,10 +318,11 @@ public class CheckersEngineTest {
     }
 
     public ArrayList<ArrayList<int[][]>> getAllPossibleBoards(int figureKey) {
+        canKill = false;
         this.dir = figureKey == GOOD_PLAYER ? -1 : 1;
         allPossibleBoardsFinal = new ArrayList<>();
         int queenKey = figureKey * 10 + figureKey;
-        isCheckersCanKill(figureKey);
+        isCheckersCanKill(figureKey, queenKey);
         for (int y = 0; y < this.board.length; y++) {
             for (int x = 0; x < this.board[y].length; x++) {
                 if (this.board[y][x] == figureKey) {
@@ -329,5 +333,10 @@ public class CheckersEngineTest {
             }
         }
         return allPossibleBoardsFinal;
+    }
+
+
+    public ArrayList<int[][]> getPossibleBoards(int figureKey) {
+        return ConvertUtils.uniteBords(getAllPossibleBoards(figureKey));
     }
 }
