@@ -5,6 +5,7 @@ import checkers.bot.api.IHeuristic;
 import checkers.bot.engine.CheckersEngine;
 import checkers.bot.util.ConvertUtils;
 import checkers.bot.util.Move;
+import org.apache.catalina.Engine;
 
 import java.util.*;
 
@@ -12,12 +13,14 @@ public class CheckersBotAi implements ICheckersBotAi {
     public static int DEPTH = 6;
     private IHeuristic heuristic;
     private IHeuristic helpingHeuristic;
+    private IHeuristic enemyHeuristic;
     private String color;
 
 
-    public CheckersBotAi(IHeuristic heuristic, IHeuristic helpingHeuristic) {
+    public CheckersBotAi(IHeuristic heuristic, IHeuristic helpingHeuristic, IHeuristic enemyHeuristic) {
         this.heuristic = heuristic;
         this.helpingHeuristic = helpingHeuristic;
+        this.enemyHeuristic = enemyHeuristic;
     }
 
     @Override
@@ -27,8 +30,16 @@ public class CheckersBotAi implements ICheckersBotAi {
 
     @Override
     public Move getNextStep(int[][] curState) {
-        int[][] resMap = miniMax(curState, DEPTH, true);
-        return ConvertUtils.getStepByTwoBoards(curState, resMap, color);
+        try {
+            int[][] resMap = miniMax(curState, DEPTH, true);
+            return ConvertUtils.getStepByTwoBoards(curState, resMap, color);
+        } catch (Exception exception) {
+//            exception.printStackTrace();
+            CheckersEngine checkersEngine = new CheckersEngine(curState);
+            int[][] resMap = getRandom(checkersEngine.getPossibleBoards(1));
+            return ConvertUtils.getStepByTwoBoards(curState, resMap, color);
+        }
+
     }
 
     public int[][] miniMax(int[][] curState, int depth, boolean isMax) {
@@ -41,26 +52,35 @@ public class CheckersBotAi implements ICheckersBotAi {
             possibleMoves = checkersEngine.getPossibleBoards(1);
         else possibleMoves = checkersEngine.getPossibleBoards(2);
 
+
+        if (possibleMoves.size() == 0) return null;
         Map<int[][], Integer> vals = new HashMap<>();
         List<int[][]> possVals = new ArrayList<>();
         if (isMax) {
             for (int[][] board : possibleMoves) {
-                vals.put(board, heuristic.estimate(curState, this.miniMax(board, depth - 1, false)));
+                int[][] temp = this.miniMax(board, depth - 1, false);
+                if (temp != null)
+                    vals.put(board, heuristic.estimate(curState, temp));
             }
+            if (vals.values().size() == 0) return null;
             int maxVal = Collections.max(vals.values());
             for (int[][] n : possibleMoves) {
-                if (vals.get(n) == maxVal) possVals.add(n);
+                if (vals.containsKey(n) && vals.get(n) == maxVal) possVals.add(n);
             }
         } else {
             for (int[][] board : possibleMoves) {
-                vals.put(board, heuristic.estimate(curState, this.miniMax(board, depth - 1, true)));
+                int[][] temp = this.miniMax(board, depth - 1, true);
+                if (temp != null)
+                    vals.put(board, enemyHeuristic.estimate(curState, temp));
             }
+            if (vals.values().size() == 0) return null;
             int minVal = Collections.min(vals.values());
             for (int[][] n : possibleMoves) {
-                if (vals.get(n) == minVal) possVals.add(n);
+                if (vals.containsKey(n) && vals.get(n) == minVal) possVals.add(n);
             }
 
         }
+
         if (possVals.size() == 1)
             return possVals.get(0);
         Map<int[][], Integer> finVals = new HashMap<>();
