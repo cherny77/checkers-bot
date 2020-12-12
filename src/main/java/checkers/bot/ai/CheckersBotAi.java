@@ -59,6 +59,9 @@ public class CheckersBotAi implements ICheckersBotAi {
             }
 
         }
+        if (possVals.size() == 1)
         return possVals.get(0);
+        return possVals.get(0);
+//        if (isMax)
     }
 }
